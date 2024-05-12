@@ -1,0 +1,33 @@
+#card-preview {
+  background: $transparent-png-bg;
+  position: relative;
+  width: $card-preview-width;
+  height: $card-preview-height;
+
+  #outline-preview {
+    width: 100%;
+    height: auto;
+  }
+
+  #slots-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    .image-slot-container {
+      position: relative;
+
+      img.slot-image {
+        transition: width 0.3s ease;
+        position: absolute;
+        cursor: move;
+
+        &.dragging {
+          opacity: 0.2;
+        }
+      }
+    }
+  }
+}

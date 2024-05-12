@@ -1,0 +1,39 @@
+/*****************************
+/           Colors
+*****************************/
+/*****************************
+/           Dir
+*****************************/
+/*****************************
+/           Variables
+*****************************/
+body {
+  background-color: mediumaquamarine; }
+
+#card-preview {
+  background: repeating-conic-gradient(#808080 0% 25%, #C0C0C0 0% 50%) 50%/2rem 2rem;
+  position: relative;
+  width: 416px;
+  height: 581px; }
+  #card-preview #outline-preview {
+    width: 100%;
+    height: auto; }
+  #card-preview #slots-preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%; }
+    #card-preview #slots-preview .image-slot-container {
+      position: relative; }
+      #card-preview #slots-preview .image-slot-container img.slot-image {
+        transition: width 0.3s ease;
+        position: absolute;
+        cursor: move; }
+        #card-preview #slots-preview .image-slot-container img.slot-image.dragging {
+          opacity: 0.2; }
+
+.deleted {
+  display: none; }
+
+/*# sourceMappingURL=style.css.map */

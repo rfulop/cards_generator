@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags static %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h2>Frames</h2>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <h3>Slots</h3>
+                    {{ slot_formset.management_form }}
+                    {% for form in slot_formset %}
+                        {{ form|crispy }}
+                    {% endfor %}
+                    <div class="accordion" id="slots-container">
+                    </div>
+                    <button type="button" hx-get="{% url 'create-slot-form' %}" hx-swap="beforeend"
+                            hx-target="#slots-container"
+                            hx-swap-oob="true"
+                            hx-vals="js:{total_forms: document.getElementById('id_slots-TOTAL_FORMS').value}">
+                        Add Slot
+                    </button>
+
+                    <button type="submit" class="btn btn-primary">Creer</button>
+                </form>
+            </div>
+            <div class="col-md-4">
+                <div id="card-preview">
+                    <div id="outline-preview"></div>
+                    <div id="slots-preview"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/create_card.js' %}"></script>
+{% endblock %}
