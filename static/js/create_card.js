@@ -66,14 +66,11 @@ function handleDragEnd(e, clone) {
 
         e.target.style.left = `${newLeft}px`;
         e.target.style.top = `${newTop}px`;
-        console.log('e.target', e.target);
 
         const slotUuid = e.target.getAttribute(SELECTORS.dataSlotUuid);
-        console.log('slotUuid', slotUuid);
 
         const xPositionInput = document.getElementById(`id_slots-${slotUuid}-x_position`);
         const yPositionInput = document.getElementById(`id_slots-${slotUuid}-y_position`);
-        console.log('xPositionInput', xPositionInput);
 
         if (xPositionInput && yPositionInput) {
             xPositionInput.value = (newLeft + clone.current.offsetWidth / 2) / cardPreviewRect.width;
@@ -110,7 +107,6 @@ function updateSlotTitle(input) {
 }
 
 function handleAlertFadeOut(node) {
-    console.log('handleAlertFadeOut', node)
     setTimeout(function() {
         node.style.opacity = '0';
         setTimeout(function() {
@@ -169,7 +165,6 @@ function initializeEventListeners() {
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.addedNodes) {
-                console.log('mutation.addedNodes', mutation.addedNodes);
                 mutation.addedNodes.forEach((node) => {
                     if (node.nodeType === 1) {
                         const slotTitleInput = node.querySelector(SELECTORS.slotTitleInput);
