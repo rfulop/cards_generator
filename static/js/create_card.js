@@ -4,6 +4,7 @@ const SELECTORS = {
     slotPreview: '#slots-preview',
     dataSlotUuid: 'data-slot-id',
     slotsContainer: 'slots-container',
+    slotTitleInput: '.slot-title-input',
 };
 const CLASSES = {
     dragging: 'dragging',
@@ -94,6 +95,44 @@ function makeImageDraggable(img) {
     img.addEventListener('dragend', (e) => handleDragEnd(e, clone));
 }
 
+function updateSlotTitle(input) {
+    input.addEventListener('input', function() {
+        const slotElement = this.closest('.slot');
+        const slotTitleElement = slotElement ? slotElement.querySelector('.slot-title') : null;
+        const offcanvasTitleElement = slotElement ? slotElement.querySelector('.offcanvas-title') : null;
+        if (slotTitleElement) {
+            slotTitleElement.textContent = this.value;
+        }
+        if (offcanvasTitleElement) {
+            offcanvasTitleElement.textContent = this.value;
+        }
+    });
+}
+
+function handleAlertFadeOut(node) {
+    console.log('handleAlertFadeOut', node)
+    setTimeout(function() {
+        node.style.opacity = '0';
+        setTimeout(function() {
+            node.style.display = 'none';
+        }, 500);
+    }, 4000);
+}
+
+function handleSelectElement(node) {
+    setTimeout(function() {
+        let isValid = true;
+        if (node.value === '') {
+            isValid = false;
+        }
+        if (!isValid) {
+            node.addEventListener('submit', function(e) {
+                e.preventDefault();
+            });
+        }
+    }, 4000);
+}
+
 function initializeEventListeners() {
     const slotPreview = document.querySelector(SELECTORS.slotPreview);
     const slotsContainer = document.getElementById(SELECTORS.slotsContainer);
@@ -122,12 +161,27 @@ function initializeEventListeners() {
 
     document.querySelectorAll(SELECTORS.slotImage).forEach(makeImageDraggable);
 
+    document.querySelectorAll(SELECTORS.slotTitleInput).forEach(updateSlotTitle);
+
+    document.querySelectorAll('.alert').forEach(handleAlertFadeOut);
+
+
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.addedNodes) {
+                console.log('mutation.addedNodes', mutation.addedNodes);
                 mutation.addedNodes.forEach((node) => {
-                    if (node.nodeType === 1 && node.matches(SELECTORS.slotImage)) {
-                        makeImageDraggable(node);
+                    if (node.nodeType === 1) {
+                        const slotTitleInput = node.querySelector(SELECTORS.slotTitleInput);
+                        if (slotTitleInput) {
+                            updateSlotTitle(slotTitleInput);
+                        }
+                        if (node.matches(SELECTORS.slotImage)) {
+                            makeImageDraggable(node);
+                        }
+                        if (node.matches('select')) {
+                            handleSelectElement(node);
+                        }
                     }
                 });
             }

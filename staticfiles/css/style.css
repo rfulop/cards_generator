@@ -7,9 +7,6 @@
 /*****************************
 /           Variables
 *****************************/
-body {
-  background-color: mediumaquamarine; }
-
 #card-preview {
   background: repeating-conic-gradient(#808080 0% 25%, #C0C0C0 0% 50%) 50%/2rem 2rem;
   position: relative;
@@ -35,5 +32,10 @@ body {
 
 .deleted {
   display: none; }
+
+.vertical-separator {
+  border-left: 1px solid #000;
+  height: 100%;
+  width: 0; }
 
 /*# sourceMappingURL=style.css.map */

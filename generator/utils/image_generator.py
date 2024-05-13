@@ -48,6 +48,10 @@ def generate_card_image(outline, slots, displayed_width):
     # Save the final image
     final_image_filename = f'{uuid.uuid4()}.png'
     final_image_path = os.path.join(settings.SAVED_CARDS_DIR, final_image_filename)
+
+    # Create the saved cards directory if it doesn't exist
+    os.makedirs(settings.SAVED_CARDS_DIR, exist_ok=True)
+
     save_image(base_image, final_image_path)
 
     return final_image_path

@@ -1,6 +1,7 @@
+from django.contrib import messages
 from django.forms import formset_factory
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
 from .constants import DEFAULT_SLOT_IMAGE_SIZE, DISPLAYED_WIDTH
@@ -78,6 +79,9 @@ def create_card(request):
                      for form in slot_formset if form.cleaned_data.get('DELETE') is False]
 
             generate_card_image(outline, slots, DISPLAYED_WIDTH)
+
+            messages.success(request, 'Card created successfully')
+            return redirect('create-card')
         else:
             return render(request, 'generator/create_card.html',
                           {'form': outline_form, 'slot_formset': slot_formset})

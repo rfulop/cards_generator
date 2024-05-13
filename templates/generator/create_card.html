@@ -4,30 +4,60 @@
 
 {% block content %}
     <div class="container mt-4">
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                    <div class="alert alert-dismissible alert-success">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <strong>Well done!</strong> {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
         <div class="row">
             <div class="col-md-8">
-                <h2>Frames</h2>
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {{ form|crispy }}
-                    <h3>Slots</h3>
-                    {{ slot_formset.management_form }}
-                    {% for form in slot_formset %}
-                        {{ form|crispy }}
-                    {% endfor %}
-                    <div class="accordion" id="slots-container">
-                    </div>
-                    <button type="button" hx-get="{% url 'create-slot-form' %}" hx-swap="beforeend"
-                            hx-target="#slots-container"
-                            hx-swap-oob="true"
-                            hx-vals="js:{total_forms: document.getElementById('id_slots-TOTAL_FORMS').value}">
-                        Add Slot
-                    </button>
 
-                    <button type="submit" class="btn btn-primary">Creer</button>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="row justify-content-between">
+
+                        <div class="col-md-5">
+                            <h2>Outline</h2>
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h2>Slots</h2>
+                                <div class="align-self-end">
+
+                                    <button class="btn btn-info btn-sm" type="button"
+                                            hx-get="{% url 'create-slot-form' %}" hx-swap="beforeend"
+                                            hx-target="#slots-container"
+                                            hx-swap-oob="true"
+                                            hx-vals="js:{total_forms: document.getElementById('id_slots-TOTAL_FORMS').value}">
+                                        Add Slot
+                                    </button>
+                                </div>
+                            </div>
+                            {{ slot_formset.management_form }}
+                            <div class="d-flex flex-row flex-wrap gap-2" id="slots-container">
+                            </div>
+
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Creer la carte</button>
                 </form>
+
             </div>
-            <div class="col-md-4">
+
+            <div class="col-md-1">
+                <div class="vertical-separator"></div>
+            </div>
+
+            <div class="col-md-3">
                 <div id="card-preview">
                     <div id="outline-preview"></div>
                     <div id="slots-preview"></div>

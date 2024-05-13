@@ -1,8 +1,8 @@
 import json
 
 from django import forms
-from django.urls import reverse
 from django.forms import formset_factory, BaseFormSet
+from django.urls import reverse
 
 from .constants import DEFAULT_SLOT_IMAGE_SIZE, DEFAULT_MAX_SLOT_IMAGE_SIZE
 from .models import CardOutline, CardSlot
@@ -26,6 +26,7 @@ class BaseCardSlotForm(BaseFormSet):
 
 
 class CardSlotForm(forms.Form):
+    title = forms.CharField(max_length=100, label='Titre du slot')
     image = forms.ModelChoiceField(queryset=CardSlot.objects.all(), empty_label="Sélectionnez un slot...",
                                    label='Slot de la carte')
     size = forms.IntegerField(
@@ -44,9 +45,13 @@ class CardSlotForm(forms.Form):
     y_position = forms.FloatField(widget=forms.HiddenInput(), initial=0)
 
     def __init__(self, *args, **kwargs):
-        slot_index = kwargs.pop('slot_index', None)
+        slot_index = kwargs.pop('slot_index', 0)
         super().__init__(*args, **kwargs)
         slot_preview_url = reverse('slot-preview')
+        self.fields['title'].initial = f'Slot {slot_index}'
+        self.fields['title'].widget.attrs.update({
+            'class': 'slot-title-input',
+        })
         self.fields['image'].widget.attrs.update({
             'hx-get': slot_preview_url,
             'hx-target': f'#slot-img-container-{slot_index}',

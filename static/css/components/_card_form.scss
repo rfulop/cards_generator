@@ -1,3 +1,9 @@
 .deleted {
   display: none;
 }
+
+.vertical-separator {
+    border-left: 1px solid #000;
+    height: 100%;
+    width: 0;
+}
