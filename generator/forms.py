@@ -5,11 +5,15 @@ from django.forms import formset_factory, BaseFormSet
 from django.urls import reverse
 
 from .constants import DEFAULT_SLOT_IMAGE_SIZE, DEFAULT_MAX_SLOT_IMAGE_SIZE
-from .models import CardOutline, CardSlot
+from .models import OutlineImage, SlotImage
+
+
+class CardDetailsForm(forms.Form):
+    name = forms.CharField(max_length=100, label='Nom de la carte')
 
 
 class CardOutlineSelectionForm(forms.Form):
-    outline = forms.ModelChoiceField(queryset=CardOutline.objects.all(), empty_label="Sélectionnez un contour...",
+    outline = forms.ModelChoiceField(queryset=OutlineImage.objects.all(), empty_label="Sélectionnez un contour...",
                                      label='Contour de la carte')
 
     def __init__(self, *args, **kwargs):
@@ -27,7 +31,7 @@ class BaseCardSlotForm(BaseFormSet):
 
 class CardSlotForm(forms.Form):
     title = forms.CharField(max_length=100, label='Titre du slot')
-    image = forms.ModelChoiceField(queryset=CardSlot.objects.all(), empty_label="Sélectionnez un slot...",
+    image = forms.ModelChoiceField(queryset=SlotImage.objects.all(), empty_label="Sélectionnez un slot...",
                                    label='Slot de la carte')
     size = forms.IntegerField(
         label='Taille du slot (en %)',

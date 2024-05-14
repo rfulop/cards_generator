@@ -27,5 +27,5 @@ RUN pip install --user -r requirements.txt
 # Expose port 8000 for the application
 EXPOSE 8000
 
-# Command to start the Django development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Command to run migrations and start the Django development server
+CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000

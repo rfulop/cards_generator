@@ -148,4 +148,4 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Custom settings
-SAVED_CARDS_DIR = 'media/saved_cards'
+CARD_IMAGE_UPLOAD_PATH = 'generated_cards/'

@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-4 d-flex flex-column align-items-center justify-content-center">
+        <h1>{{ card.name }}</h1>
+        <img class="card-image-detail" src="{{ card.image.url }}" alt="{{ card.name }}">
+    </div>
+{% endblock %}

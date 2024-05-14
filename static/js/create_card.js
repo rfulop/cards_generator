@@ -106,15 +106,6 @@ function updateSlotTitle(input) {
     });
 }
 
-function handleAlertFadeOut(node) {
-    setTimeout(function() {
-        node.style.opacity = '0';
-        setTimeout(function() {
-            node.style.display = 'none';
-        }, 500);
-    }, 4000);
-}
-
 function handleSelectElement(node) {
     setTimeout(function() {
         let isValid = true;
@@ -158,9 +149,6 @@ function initializeEventListeners() {
     document.querySelectorAll(SELECTORS.slotImage).forEach(makeImageDraggable);
 
     document.querySelectorAll(SELECTORS.slotTitleInput).forEach(updateSlotTitle);
-
-    document.querySelectorAll('.alert').forEach(handleAlertFadeOut);
-
 
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {

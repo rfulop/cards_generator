@@ -1,13 +1,13 @@
 from django.contrib import admin
 
-from .models import CardOutline, CardSlot
+from .models import OutlineImage, SlotImage
 
 
-@admin.register(CardOutline)
+@admin.register(OutlineImage)
 class CardOutlineAdmin(admin.ModelAdmin):
     list_display = ('name', 'image')
 
 
-@admin.register(CardSlot)
+@admin.register(SlotImage)
 class CardSlotAdmin(admin.ModelAdmin):
     list_display = ('name', 'image')
