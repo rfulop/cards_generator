@@ -41,7 +41,8 @@ class CardPreset(models.Model):
 class Card(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField(upload_to=settings.CARD_IMAGE_UPLOAD_PATH)
-    preset = models.JSONField(null=True, blank=True)
+    preset_json = models.JSONField(null=True, blank=True)
+    preset = models.ForeignKey(CardPreset, on_delete=models.SET_NULL, null=True, blank=True, related_name='cards')
 
     def __str__(self):
         return self.name

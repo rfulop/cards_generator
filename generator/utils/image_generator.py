@@ -1,8 +1,10 @@
+import os
 import uuid
 
 from PIL import Image
-import os
 from django.conf import settings
+
+from generator.models import SlotImage
 
 
 def open_image(image_path):
@@ -31,14 +33,18 @@ def generate_card_image(outline, slots, displayed_width):
     # Calculate the scale factor
     scale_factor = base_image.width / displayed_width
 
-    for slot, size, x_position, y_position in slots:
+    for slot in slots:
         # Open the slot image
-        slot_image = open_image(slot.image.path)
+        slot_image_instance = SlotImage.objects.get(id=slot['image'])
+        slot_image = open_image(slot_image_instance.image.path)
 
         # Resize the slot image
+        size = slot['size']
         slot_image = resize_image(slot_image, size * scale_factor)
 
         # Calculate the scaled positions
+        x_position = slot['x_position']
+        y_position = slot['y_position']
         scaled_x_position = int(x_position * base_image.width) - slot_image.width // 2
         scaled_y_position = int(y_position * base_image.height) - slot_image.height // 2
 

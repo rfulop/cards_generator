@@ -5,11 +5,13 @@ from django.forms import formset_factory, BaseFormSet
 from django.urls import reverse
 
 from .constants import DEFAULT_SLOT_IMAGE_SIZE, DEFAULT_MAX_SLOT_IMAGE_SIZE
-from .models import OutlineImage, SlotImage
+from .models import OutlineImage, SlotImage, CardPreset
 
 
 class CardDetailsForm(forms.Form):
     name = forms.CharField(max_length=100, label='Nom de la carte')
+    preset = forms.ModelChoiceField(queryset=CardPreset.objects.all(),
+                                    empty_label="Vous pouvez sélectionner un preset...", required=False)
 
 
 class CardOutlineSelectionForm(forms.Form):

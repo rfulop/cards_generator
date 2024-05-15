@@ -2,6 +2,12 @@
 
 {% block content %}
     <div class="container mt-4 d-flex flex-column align-items-center justify-content-center">
+        {% if not card.preset %}
+            <form method="post" action="{% url 'save-as-preset' card.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary mt-3">Enregistrer le preset de la carte</button>
+            </form>
+        {% endif %}
         <h1>{{ card.name }}</h1>
         <img class="card-image-detail" src="{{ card.image.url }}" alt="{{ card.name }}">
     </div>

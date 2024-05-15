@@ -2,15 +2,15 @@ import json
 
 from django.contrib import messages
 from django.forms import formset_factory
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 
 from .constants import DEFAULT_SLOT_IMAGE_SIZE, DISPLAYED_WIDTH
 from .forms import CardOutlineSelectionForm, CardSlotForm, CardSlotFormSet, CardDetailsForm
-from .models import OutlineImage, SlotImage, Card
+from .models import OutlineImage, SlotImage, Card, CardPreset
+from .utils.card_preset import create_card_preset_from_json
 from .utils.image_generator import generate_card_image
-from .utils.card_utils import prepare_slots_for_json
 
 
 def get_object_or_404(model, pk):
@@ -18,6 +18,10 @@ def get_object_or_404(model, pk):
         return model.objects.get(pk=pk)
     except model.DoesNotExist:
         raise Http404(f'{model.__name__} not found')
+
+
+def home(request):
+    return render(request, 'base.html')
 
 
 def outline_preview(request):
@@ -78,28 +82,37 @@ def create_card(request):
 
         if card_details_form.is_valid() and outline_form.is_valid() and slot_formset.is_valid():
             card_name = card_details_form.cleaned_data.get('name')
+            preset = card_details_form.cleaned_data.get('preset')
             outline = outline_form.cleaned_data.get('outline')
-            slots = [(form.cleaned_data.get('image'), form.cleaned_data.get('size'),
-                      form.cleaned_data.get('x_position'), form.cleaned_data.get('y_position'))
-                     for form in slot_formset if form.cleaned_data.get('DELETE') is False]
+            slots = [
+                {
+                    'title': form.cleaned_data.get('title'),
+                    'image': form.cleaned_data.get('image').id,
+                    'size': form.cleaned_data.get('size'),
+                    'x_position': form.cleaned_data.get('x_position'),
+                    'y_position': form.cleaned_data.get('y_position')
+                }
+                for form in slot_formset if form.cleaned_data.get('DELETE') is False
+            ]
 
             card_image = generate_card_image(outline, slots, DISPLAYED_WIDTH)
 
-            preset = {
+            preset_dict = {
+                'name': card_name,
                 'outline': outline.id,
-                'slots': prepare_slots_for_json(slots)
+                'slots': slots
             }
-            preset_json = json.dumps(preset)
 
             card = Card(
                 name=card_name,
                 image=card_image,
-                preset=preset_json
+                preset=preset,
+                preset_json=json.dumps(preset_dict)
             )
             card.save()
 
             messages.success(request, 'Card created successfully')
-            return redirect('card-detail', pk=card.id)
+            return redirect('card-detail', card_id=card.id)
         else:
             return render(request, 'generator/create_card.html',
                           {'card_details_form': card_details_form, 'outline_form': outline_form,
@@ -115,7 +128,26 @@ def create_card(request):
                    'slot_formset': slot_formset})
 
 
-def card_detail(request, pk):
-    card = get_object_or_404(Card, pk)
+def card_detail(request, card_id):
+    card = get_object_or_404(Card, card_id)
     return render(request, 'generator/card_detail.html', {'card': card})
 
+
+def get_preset_details(request, preset_id):
+    preset = get_object_or_404(CardPreset, preset_id)
+    slots = list(preset.slots.values('id', 'title', 'image_id', 'size', 'x_position', 'y_position'))
+    data = {
+        'name': preset.name,
+        'outline_id': preset.outline.id,
+        'slots': slots,
+    }
+    return JsonResponse(data)
+
+
+def save_as_preset(request, card_id):
+    card = get_object_or_404(Card, card_id)
+    card_preset = create_card_preset_from_json(card.preset_json)
+    card.preset = card_preset
+    card.save()
+    messages.success(request, 'Card saved as preset successfully')
+    return redirect('card-detail', card_id=card.id)

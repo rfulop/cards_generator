@@ -45,7 +45,6 @@
                                     <button class="btn btn-info btn-sm" type="button"
                                             hx-get="{% url 'create-slot-form' %}" hx-swap="beforeend"
                                             hx-target="#slots-container"
-                                            hx-swap-oob="true"
                                             hx-vals="js:{total_forms: document.getElementById('id_slots-TOTAL_FORMS').value}">
                                         Add Slot
                                     </button>
@@ -56,7 +55,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="position-absolute bottom-0">
                         <button type="submit" class="btn btn-primary">Creer la carte</button>
                     </div>
@@ -76,4 +75,5 @@
         </div>
     </div>
     <script src="{% static 'js/create_card.js' %}"></script>
+    <script src="{% static 'js/preset.js' %}"></script>
 {% endblock %}

@@ -93,7 +93,7 @@ function makeImageDraggable(img) {
 }
 
 function updateSlotTitle(input) {
-    input.addEventListener('input', function() {
+    input.addEventListener('input', function () {
         const slotElement = this.closest('.slot');
         const slotTitleElement = slotElement ? slotElement.querySelector('.slot-title') : null;
         const offcanvasTitleElement = slotElement ? slotElement.querySelector('.offcanvas-title') : null;
@@ -107,13 +107,13 @@ function updateSlotTitle(input) {
 }
 
 function handleSelectElement(node) {
-    setTimeout(function() {
+    setTimeout(function () {
         let isValid = true;
         if (node.value === '') {
             isValid = false;
         }
         if (!isValid) {
-            node.addEventListener('submit', function(e) {
+            node.addEventListener('submit', function (e) {
                 e.preventDefault();
             });
         }
