@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Supprimer la carte</h1>
+        <p>Êtes-vous sûr de vouloir supprimer la carte "{{ object.name }}" ? Cette action est irréversible.</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+            <a href="{% url 'card-detail' object.id %}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+{% endblock %}

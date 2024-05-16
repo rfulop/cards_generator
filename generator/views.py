@@ -3,8 +3,9 @@ from django.forms import formset_factory
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, DetailView, ListView
+from django.views.generic import TemplateView, DetailView, ListView, DeleteView
 
 from .constants import DEFAULT_SLOT_IMAGE_SIZE, DISPLAYED_WIDTH
 from .forms import CardOutlineSelectionForm, CardSlotForm, CardSlotFormSet, CardDetailsForm
@@ -142,6 +143,12 @@ class CardDetailView(DetailView):
         if queryset is None:
             queryset = self.get_queryset()
         return get_object_or_404(queryset, pk=self.kwargs['card_id'])
+
+
+class CardDeleteView(DeleteView):
+    model = Card
+    success_url = reverse_lazy('card-list')
+    pk_url_kwarg = 'card_id'
 
 
 class GetPresetDetailsView(View):
