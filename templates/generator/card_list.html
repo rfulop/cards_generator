@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Card List</h1>
+    <div class="row">
+        {% for card in page_obj %}
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'card-detail' card.id %}" class="text-decoration-none text-dark">
+                <div class="card">
+                    <img src="{{ card.image.url }}" class="card-img-top" alt="{{ card.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{ card.name }}</h5>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% include 'generator/partials/pagination.html' %}
+</div>
+{% endblock %}

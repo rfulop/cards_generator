@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views import View
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 
 from .constants import DEFAULT_SLOT_IMAGE_SIZE, DISPLAYED_WIDTH
 from .forms import CardOutlineSelectionForm, CardSlotForm, CardSlotFormSet, CardDetailsForm
@@ -164,3 +164,9 @@ class SaveAsPresetView(View):
         card.save()
         messages.success(request, 'Card saved as preset successfully')
         return redirect('card-detail', card_id=card.id)
+
+
+class CardListView(ListView):
+    model = Card
+    template_name = 'generator/card_list.html'
+    paginate_by = 8

@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import OutlinePreviewView, SlotPreviewView, DeleteSlotFormView, CreateSlotFormView, CreateCardView, \
-    CardDetailView, GetPresetDetailsView, SaveAsPresetView
+    CardDetailView, GetPresetDetailsView, SaveAsPresetView, CardListView
 
 urlpatterns = [
     path('create-card', CreateCardView.as_view(), name='create-card'),
@@ -12,4 +12,5 @@ urlpatterns = [
     path('card/<int:card_id>', CardDetailView.as_view(), name='card-detail'),
     path('preset/<int:preset_id>/details', GetPresetDetailsView.as_view(), name='get-preset-details'),
     path('card/<int:card_id>/save-as-preset', SaveAsPresetView.as_view(), name='save-as-preset'),
+    path('cards', CardListView.as_view(), name='card-list'),
 ]
