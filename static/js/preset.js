@@ -56,7 +56,7 @@ function createSlot(slot, index) {
 function handlePresetChange() {
     const presetId = this.value;
     if (presetId) {
-        fetch(`presets/${presetId}`)
+        fetch(`preset/${presetId}/details`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
