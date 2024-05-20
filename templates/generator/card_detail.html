@@ -2,17 +2,24 @@
 
 {% block content %}
     <div class="container mt-4 d-flex flex-column align-items-center justify-content-center">
+        <h1>{{ card.name }}</h1>
+        <img class="card-image-detail my-3 img-fluid" src="{{ card.image.url }}" alt="{{ card.name }}">
+
         {% if not card.preset %}
-            <form method="post" action="{% url 'save-as-preset' card.id %}">
+            <form method="post" action="{% url 'save-as-preset' card.id %}" class="mb-3">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-primary mt-3">Enregistrer le preset de la carte</button>
+                <button type="submit" class="btn btn-primary">Enregistrer le preset de la carte</button>
             </form>
         {% endif %}
-        <h1>{{ card.name }}</h1>
-        <img class="card-image-detail" src="{{ card.image.url }}" alt="{{ card.name }}">
 
-        <form method="get" action="{% url 'card-delete' card.id %}" class="mt-3">
-            <button type="submit" class="btn btn-danger">Supprimer la carte</button>
-        </form>
+        <div class="d-flex justify-content-center gap-2">
+            <form method="get" action="{% url 'card-update' card.id %}">
+                <button type="submit" class="btn btn-warning">Modifier la carte</button>
+            </form>
+
+            <form method="get" action="{% url 'card-delete' card.id %}">
+                <button type="submit" class="btn btn-danger">Supprimer la carte</button>
+            </form>
+        </div>
     </div>
 {% endblock %}

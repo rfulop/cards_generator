@@ -186,5 +186,9 @@ function removeSlot(button) {
         if (deleteInput) {
             deleteInput.value = 'on';
         }
+        const imageSelect = document.querySelector(`#id_slots-${slotId.split('#slot')[1]}-image`);
+        if (imageSelect) {
+            imageSelect.disabled = true;
+        }
     }
 }
