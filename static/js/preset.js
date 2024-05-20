@@ -17,6 +17,10 @@ class CardForm {
         this.initEventListeners();
     }
 
+    static init() {
+        new CardForm();
+    }
+
     initEventListeners() {
         if (this.isUpdate) {
             document.addEventListener("DOMContentLoaded", () => {
@@ -160,4 +164,4 @@ class CardForm {
     }
 }
 
-new CardForm();
+CardForm.init();
