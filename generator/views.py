@@ -251,8 +251,7 @@ class CardUpdateView(UpdateView):
             card.preset_json = json.dumps(preset_dict)
 
             if card.preset:
-                card_preset = create_card_preset_from_json(card.preset_json)
-                card.preset = card_preset
+                card.preset = None
 
             if card.image:
                 card.image.delete()
