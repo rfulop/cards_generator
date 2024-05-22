@@ -13,13 +13,20 @@
     height: 100%;
     width: 100%; }
     #card-preview #slots-preview .image-slot-container {
-      position: relative; }
+      position: relative;
+      z-index: 1; }
       #card-preview #slots-preview .image-slot-container img.slot-image {
         transition: width 0.3s ease;
         position: absolute;
         cursor: move; }
         #card-preview #slots-preview .image-slot-container img.slot-image.dragging {
           opacity: 0.2; }
+    #card-preview #slots-preview .image-gem-container {
+      position: relative;
+      z-index: 0; }
+      #card-preview #slots-preview .image-gem-container img.gem-image {
+        position: absolute;
+        cursor: move; }
 
 .deleted {
   display: none; }

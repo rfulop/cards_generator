@@ -20,10 +20,20 @@ function getCardPreviewRect() {
 
 function updateImageSize(slider) {
     const slotUuid = slider.getAttribute(SELECTORS.dataSlotUuid);
-    const image = document.getElementById(`slot-img-${slotUuid}`);
-    if (image) {
+    const slotImage = document.getElementById(`slot-img-${slotUuid}`);
+    const gemImage = document.getElementById(`gem-img-${slotUuid}`);
+    if (slotImage) {
         const newSize = slider.value;
-        image.style.width = `${newSize}px`;
+        slotImage.style.width = `${newSize}px`;
+        slotImage.style.height = 'auto';
+        updateImageProperties(slotUuid, slotProperties, slotImage);
+
+        if (gemImage) {
+            const gemSize = newSize * 0.99;
+            gemImage.style.width = `${gemSize}px`;
+            gemImage.style.height = 'auto';
+            updateImageProperties(slotUuid, gemProperties, gemImage);
+        }
     }
 }
 
@@ -51,6 +61,17 @@ function handleDrag(e, clone) {
             newTop + clone.current.offsetHeight / 2 >= 0 && newTop + clone.current.offsetHeight / 2 <= cardPreviewRect.height) {
             clone.current.style.left = `${newLeft}px`;
             clone.current.style.top = `${newTop}px`;
+
+            const slotUuid = e.target.getAttribute(SELECTORS.dataSlotUuid);
+            updateImageProperties(slotUuid, slotProperties, clone.current);
+
+            const gemImage = document.getElementById(`gem-img-${slotUuid}`);
+            if (gemImage) {
+                const gemSize = gemImage.offsetWidth;
+                gemImage.style.left = `${newLeft + (clone.current.offsetWidth - gemSize) / 2}px`;
+                gemImage.style.top = `${newTop + (clone.current.offsetHeight - gemSize) / 2}px`;
+                updateImageProperties(slotUuid, gemProperties, gemImage);
+            }
         }
     }
 }
@@ -75,6 +96,16 @@ function handleDragEnd(e, clone) {
         if (xPositionInput && yPositionInput) {
             xPositionInput.value = (newLeft + clone.current.offsetWidth / 2) / cardPreviewRect.width;
             yPositionInput.value = (newTop + clone.current.offsetHeight / 2) / cardPreviewRect.height;
+        }
+
+        updateImageProperties(slotUuid, slotProperties, e.target);
+
+        const gemImage = document.getElementById(`gem-img-${slotUuid}`);
+        if (gemImage) {
+            const gemSize = gemImage.offsetWidth;
+            gemImage.style.left = `${newLeft + (clone.current.offsetWidth - gemSize) / 2}px`;
+            gemImage.style.top = `${newTop + (clone.current.offsetHeight - gemSize) / 2}px`;
+            updateImageProperties(slotUuid, gemProperties, gemImage);
         }
 
         getCardPreviewElement().removeChild(clone.current);
@@ -106,18 +137,43 @@ function updateSlotTitle(input) {
     });
 }
 
-function handleSelectElement(node) {
-    setTimeout(function () {
-        let isValid = true;
-        if (node.value === '') {
-            isValid = false;
-        }
-        if (!isValid) {
-            node.addEventListener('submit', function (e) {
-                e.preventDefault();
-            });
-        }
-    }, 4000);
+function applyStoredProperties(slotUuid, propertiesDict, imageElement) {
+    const properties = propertiesDict[slotUuid];
+    if (properties) {
+        setTimeout(() => {
+            imageElement.style.width = properties.width;
+            imageElement.style.height = properties.height;
+            imageElement.style.left = properties.left;
+            imageElement.style.top = properties.top;
+        }, 20);
+    }
+}
+
+
+function updateImageProperties(slotUuid, propertiesDict, imageElement) {
+    propertiesDict[slotUuid] = {
+        width: imageElement.style.width,
+        height: imageElement.style.height,
+        left: imageElement.style.left,
+        top: imageElement.style.top,
+    };
+}
+
+
+function centerGem(slotImage, gemImage) {
+    const slotLeft = parseFloat(slotImage.style.left);
+    const slotTop = parseFloat(slotImage.style.top);
+    const gemSize = gemImage.offsetWidth;
+
+    const gemLeft = slotLeft + (slotImage.offsetWidth - gemSize) / 2;
+    const gemTop = slotTop + (slotImage.offsetHeight - gemSize) / 2;
+
+    setTimeout(() => {
+        gemImage.style.width = `${gemSize}px`;
+        gemImage.style.height = 'auto';
+        gemImage.style.left = `${gemLeft}px`;
+        gemImage.style.top = `${gemTop}px`;
+    }, 20);
 }
 
 function initializeEventListeners() {
@@ -162,8 +218,35 @@ function initializeEventListeners() {
                         if (node.matches(SELECTORS.slotImage)) {
                             makeImageDraggable(node);
                         }
-                        if (node.matches('select')) {
-                            handleSelectElement(node);
+                        if (node.classList.contains('image-slot-gem-container')) {
+                            const slotUuid = node.id.match(/slot-container-(\d+)/)[1];
+
+                            const slotImageContainer = node.querySelector('.image-slot-container');
+                            const gemImageContainer = node.querySelector('.image-gem-container');
+
+                            const slotImageObserver = new MutationObserver((slotMutations) => {
+                                slotMutations.forEach((slotMutation) => {
+                                    slotMutation.addedNodes.forEach((slotNode) => {
+                                        if (slotNode.nodeType === 1 && slotNode.classList.contains('slot-image')) {
+                                            applyStoredProperties(slotUuid, slotProperties, slotNode);
+                                        }
+                                    });
+                                });
+                            });
+
+                            const gemImageObserver = new MutationObserver((gemMutations) => {
+                                gemMutations.forEach((gemMutation) => {
+                                    gemMutation.addedNodes.forEach((gemNode) => {
+                                        if (gemNode.nodeType === 1 && gemNode.classList.contains('gem-image')) {
+                                            applyStoredProperties(slotUuid, gemProperties, gemNode);
+                                            centerGem(slotImageContainer.querySelector('.slot-image'), gemNode);
+                                        }
+                                    });
+                                });
+                            });
+
+                            slotImageObserver.observe(slotImageContainer, {childList: true});
+                            gemImageObserver.observe(gemImageContainer, {childList: true});
                         }
                     }
                 });
@@ -173,6 +256,9 @@ function initializeEventListeners() {
 
     observer.observe(document.body, {childList: true, subtree: true});
 }
+
+const slotProperties = {};
+const gemProperties = {};
 
 document.addEventListener('DOMContentLoaded', initializeEventListeners);
 

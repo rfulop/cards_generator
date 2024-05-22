@@ -11,7 +11,7 @@ from django.views.generic import TemplateView, DetailView, ListView, DeleteView,
 
 from .constants import DEFAULT_SLOT_IMAGE_SIZE, DISPLAYED_WIDTH
 from .forms import CardOutlineSelectionForm, CardSlotForm, CardSlotFormSet, CardDetailsForm
-from .models import OutlineImage, SlotImage, Card, CardPreset
+from .models import OutlineImage, SlotImage, Card, CardPreset, GemImage
 from .utils.card_creator import create_card
 from .utils.card_preset import create_card_preset_from_json
 from .utils.image_generator import generate_card_image
@@ -52,6 +52,25 @@ class SlotPreviewView(TemplateView):
 
     def render_to_response(self, context, **response_kwargs):
         if 'slot' not in context:
+            return HttpResponse('', status=200)
+        return super().render_to_response(context, **response_kwargs)
+
+
+class GemPreviewView(TemplateView):
+    template_name = 'generator/partials/gem_preview.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        slot_index = self.request.GET.get('slot_index')
+        gem_id = self.request.GET.get(f'slots-{slot_index}-gem')
+        if gem_id:
+            context['gem'] = get_object_or_404(GemImage, pk=gem_id)
+            context['slot_index'] = slot_index
+            context['size'] = DEFAULT_SLOT_IMAGE_SIZE * 0.99
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        if 'gem' not in context:
             return HttpResponse('', status=200)
         return super().render_to_response(context, **response_kwargs)
 

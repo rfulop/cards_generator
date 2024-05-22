@@ -5,7 +5,7 @@ from django.forms import formset_factory, BaseFormSet
 from django.urls import reverse
 
 from .constants import DEFAULT_SLOT_IMAGE_SIZE, DEFAULT_MAX_SLOT_IMAGE_SIZE
-from .models import OutlineImage, SlotImage, CardPreset
+from .models import OutlineImage, SlotImage, GemImage, CardPreset
 
 
 class CardDetailsForm(forms.Form):
@@ -49,11 +49,14 @@ class CardSlotForm(forms.Form):
 
     x_position = forms.FloatField(widget=forms.HiddenInput(), initial=0)
     y_position = forms.FloatField(widget=forms.HiddenInput(), initial=0)
+    gem = forms.ModelChoiceField(queryset=GemImage.objects.all(), empty_label="Sélectionnez une gemme...",
+                                 label='Gemme', required=False)
 
     def __init__(self, *args, **kwargs):
         slot_index = kwargs.pop('slot_index', 0)
         super().__init__(*args, **kwargs)
         slot_preview_url = reverse('slot-preview')
+        gem_preview_url = reverse('gem-preview')
         self.fields['title'].initial = f'Slot {slot_index}'
         self.fields['title'].widget.attrs.update({
             'class': 'slot-title-input',
@@ -63,12 +66,20 @@ class CardSlotForm(forms.Form):
             'hx-target': f'#slot-img-container-{slot_index}',
             'hx-swap': 'innerHTML',
             'hx-vals': json.dumps({'slot_index': str(slot_index)}),
+            'data-slot-id': str(slot_index),
         })
         self.fields['size'].widget.attrs.update({
             'data-slot-id': str(slot_index),
         })
         self.fields['x_position'].name = f'x_position_{slot_index}'
         self.fields['y_position'].name = f'y_position_{slot_index}'
+        self.fields['gem'].widget.attrs.update({
+            'hx-get': gem_preview_url,
+            'hx-target': f'#gem-img-container-{slot_index}',
+            'hx-swap': 'innerHTML',
+            'hx-vals': json.dumps({'slot_index': str(slot_index)}),
+            'data-slot-id': str(slot_index),
+        })
 
 
 CardSlotFormSet = formset_factory(CardSlotForm, formset=BaseCardSlotForm, extra=0, can_delete=True)

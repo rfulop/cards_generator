@@ -1,13 +1,15 @@
 from django.urls import path
 
 from .views import CardDetailView, CardDeleteView, CardListView, CardCreateView, OutlinePreviewView, \
-    SlotPreviewView, DeleteSlotFormView, CreateSlotFormView, GetPresetDetailsView, SaveAsPresetView, CardUpdateView
+    SlotPreviewView, DeleteSlotFormView, CreateSlotFormView, GetPresetDetailsView, SaveAsPresetView, CardUpdateView, \
+    GemPreviewView
 
 urlpatterns = [
     path('', CardCreateView.as_view(), name='card-create'),
     path('create-card/', CardCreateView.as_view(), name='create-card'),
     path('htmx/outline-preview/', OutlinePreviewView.as_view(), name='outline-preview'),
     path('htmx/slot-preview/', SlotPreviewView.as_view(), name='slot-preview'),
+    path('htmx/gem-preview/', GemPreviewView.as_view(), name='gem-preview'),
     path('htmx/slot/<int:index>/delete/', DeleteSlotFormView.as_view(), name='delete-slot-form'),
     path('htmx/slot/create/', CreateSlotFormView.as_view(), name='create-slot-form'),
     path('cards/', CardListView.as_view(), name='card-list'),

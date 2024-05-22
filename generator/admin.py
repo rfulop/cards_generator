@@ -1,15 +1,20 @@
 from django.contrib import admin
 
-from .models import OutlineImage, SlotImage, CardSlot, CardPreset, Card
+from .models import OutlineImage, SlotImage, CardSlot, CardPreset, Card, GemImage
 
 
 @admin.register(OutlineImage)
-class CardOutlineAdmin(admin.ModelAdmin):
+class CardOutlineImageAdmin(admin.ModelAdmin):
     list_display = ('name', 'image')
 
 
 @admin.register(SlotImage)
-class CardSlotAdmin(admin.ModelAdmin):
+class CardSlotImageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'image')
+
+
+@admin.register(GemImage)
+class GemImageAdmin(admin.ModelAdmin):
     list_display = ('name', 'image')
 
 
