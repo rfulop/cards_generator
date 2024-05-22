@@ -139,7 +139,8 @@ class CardCreateView(View):
                 'image': slot_form.cleaned_data.get('image').id,
                 'size': slot_form.cleaned_data.get('size'),
                 'x_position': slot_form.cleaned_data.get('x_position'),
-                'y_position': slot_form.cleaned_data.get('y_position')
+                'y_position': slot_form.cleaned_data.get('y_position'),
+                'gem': slot_form.cleaned_data.get('gem').id if slot_form.cleaned_data.get('gem') else None
             }
             for slot_form in slot_formset if slot_form.cleaned_data.get('DELETE') is False
         ]
@@ -202,7 +203,8 @@ class CardUpdateView(UpdateView):
                 'image_id': slot['image'],
                 'size': slot['size'],
                 'x_position': slot['x_position'],
-                'y_position': slot['y_position']
+                'y_position': slot['y_position'],
+                'gem_id': slot['gem'] if 'gem' in slot else None
             }
             for slot in slots
         ]
@@ -236,7 +238,8 @@ class CardUpdateView(UpdateView):
                         'image': slot_form.cleaned_data['image'].id,
                         'size': slot_form.cleaned_data['size'],
                         'x_position': slot_form.cleaned_data['x_position'],
-                        'y_position': slot_form.cleaned_data['y_position']
+                        'y_position': slot_form.cleaned_data['y_position'],
+                        'gem': slot_form.cleaned_data['gem'].id if slot_form.cleaned_data['gem'] else None
                     }
                     slots_data.append(slot_data)
 
@@ -283,7 +286,7 @@ class CardDeleteView(DeleteView):
 class GetPresetDetailsView(View):
     def get(self, request, *args, **kwargs):
         preset = get_object_or_404(CardPreset, pk=self.kwargs['preset_id'])
-        slots = list(preset.slots.values('id', 'title', 'image_id', 'size', 'x_position', 'y_position'))
+        slots = list(preset.slots.values('id', 'title', 'image_id', 'size', 'x_position', 'y_position', 'gem_id'))
         data = {
             'name': preset.name,
             'outline_id': preset.outline.id,

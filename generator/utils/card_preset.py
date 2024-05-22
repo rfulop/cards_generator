@@ -1,6 +1,6 @@
 import json
 
-from generator.models import CardPreset, CardSlot, SlotImage, OutlineImage
+from generator.models import CardPreset, CardSlot, SlotImage, OutlineImage, GemImage
 
 
 def create_card_preset_from_json(preset_json_str):
@@ -17,6 +17,7 @@ def create_card_preset_from_json(preset_json_str):
             size=slot_json['size'],
             x_position=slot_json['x_position'],
             y_position=slot_json['y_position'],
+            gem=GemImage.objects.get(id=slot_json['gem']) if 'gem' in slot_json else None
         )
         card_preset.slots.add(slot)
 

@@ -1,3 +1,5 @@
+const DELAY = 30;
+
 const SELECTORS = {
     cardPreview: '#card-preview',
     slotImage: '.slot-image',
@@ -145,7 +147,7 @@ function applyStoredProperties(slotUuid, propertiesDict, imageElement) {
             imageElement.style.height = properties.height;
             imageElement.style.left = properties.left;
             imageElement.style.top = properties.top;
-        }, 20);
+        }, DELAY);
     }
 }
 
@@ -161,6 +163,9 @@ function updateImageProperties(slotUuid, propertiesDict, imageElement) {
 
 
 function centerGem(slotImage, gemImage) {
+    if (!slotImage) {
+        return;
+    }
     const slotLeft = parseFloat(slotImage.style.left);
     const slotTop = parseFloat(slotImage.style.top);
     const gemSize = gemImage.offsetWidth;
@@ -173,7 +178,7 @@ function centerGem(slotImage, gemImage) {
         gemImage.style.height = 'auto';
         gemImage.style.left = `${gemLeft}px`;
         gemImage.style.top = `${gemTop}px`;
-    }, 20);
+    }, DELAY);
 }
 
 function initializeEventListeners() {

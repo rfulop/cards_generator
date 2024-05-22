@@ -51,6 +51,7 @@ class CardForm {
     updateSlotPreview(slot, index) {
         const observer = new MutationObserver((mutations, obs) => {
             const slotImage = document.getElementById(`slot-img-${index}`);
+            const gemImage = document.getElementById(`gem-img-${index}`);
             if (slotImage) {
                 const previewContainer = document.querySelector(this.PRESET_SELECTORS.cardPreview);
                 const previewContainerRect = previewContainer.getBoundingClientRect();
@@ -62,6 +63,13 @@ class CardForm {
                 slotImage.style.left = `${leftInPixels}px`;
                 slotImage.style.top = `${topInPixels}px`;
                 slotImage.style.width = `${slot.size}px`;
+
+                if (gemImage) {
+                    const gemSize = slot.size * 0.99;
+                    gemImage.style.left = `${leftInPixels}px`;
+                    gemImage.style.top = `${topInPixels}px`;
+                    gemImage.style.width = `${gemSize}px`;
+                }
 
                 obs.disconnect();
             }
@@ -95,6 +103,12 @@ class CardForm {
                         imageSelect.value = slot.image_id;
                         htmx.process(imageSelect);
                         this.dispatchChangeEvent(imageSelect);
+                    }
+                    const gemSelect = document.getElementById(`id_slots-${index}-gem`);
+                    if (gemSelect) {
+                        gemSelect.value = slot.gem_id;
+                        htmx.process(gemSelect);
+                        this.dispatchChangeEvent(gemSelect);
                     }
                     document.getElementById(`id_slots-${index}-size`).value = slot.size;
                     document.getElementById(`id_slots-${index}-x_position`).value = slot.x_position;
@@ -139,7 +153,7 @@ class CardForm {
         }
     }
 
-    handlePresetChange(event) {
+    async handlePresetChange(event) {
         const presetId = event.target.value;
         if (presetId) {
             const url = `${this.presetDetailsBaseUrl}${presetId}/details`;
@@ -150,12 +164,13 @@ class CardForm {
                     }
                     return response.json();
                 })
-                .then(data => {
+                .then(async data => {
                     this.updateOutlinePreview(data.outline_id);
                     this.resetSlots();
-                    data.slots.forEach((slot, index) => {
-                        this.createSlot(slot, index);
-                    });
+                    for (const slot of data.slots) {
+                        const index = data.slots.indexOf(slot);
+                        await this.createSlot(slot, index);
+                    }
                 })
                 .catch(e => {
                     console.log('There was a problem with the fetch operation: ' + e.message);

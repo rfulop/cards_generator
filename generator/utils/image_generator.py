@@ -4,17 +4,18 @@ import uuid
 from PIL import Image
 from django.conf import settings
 
-from generator.models import SlotImage
+from generator.constants import GEM_SIZE_RATIO
+from generator.models import SlotImage, GemImage
 
 
 def open_image(image_path):
     if not os.path.exists(image_path):
         raise FileNotFoundError(f"No such file or directory: '{image_path}'")
-    return Image.open(image_path)
+    return Image.open(image_path).convert("RGBA")
 
 
 def resize_image(image, size):
-    return image.resize((int(size), int(size)))
+    return image.resize((int(size), int(size)), Image.Resampling.LANCZOS)
 
 
 def paste_image(base_image, image, position):
@@ -47,6 +48,21 @@ def generate_card_image(outline, slots, displayed_width):
         y_position = slot['y_position']
         scaled_x_position = int(x_position * base_image.width) - slot_image.width // 2
         scaled_y_position = int(y_position * base_image.height) - slot_image.height // 2
+
+        if 'gem' in slot and slot['gem']:
+            gem_image_instance = GemImage.objects.get(id=slot['gem'])
+            gem_image = open_image(gem_image_instance.image.path)
+
+            # Resize the gem image to 99% of the slot size
+            gem_size = size * GEM_SIZE_RATIO
+            gem_image = resize_image(gem_image, gem_size * scale_factor)
+
+            # Calculate the gem position to center it within the slot
+            gem_scaled_x_position = scaled_x_position + (slot_image.width - gem_image.width) // 2
+            gem_scaled_y_position = scaled_y_position + (slot_image.height - gem_image.height) // 2
+
+            # Paste the gem image onto the base image at the calculated position
+            base_image = paste_image(base_image, gem_image, (gem_scaled_x_position, gem_scaled_y_position))
 
         # Paste the slot image onto the base image at the scaled position
         base_image = paste_image(base_image, slot_image, (scaled_x_position, scaled_y_position))

@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 
 class OutlineImage(models.Model):
@@ -58,3 +60,8 @@ class Card(models.Model):
 
     class Meta:
         ordering = ['-id']
+
+
+@receiver(post_delete, sender=CardPreset)
+def delete_preset_slots(sender, instance, **kwargs):
+    instance.slots.all().delete()
