@@ -7,36 +7,72 @@
   #outline-preview {
     width: 100%;
     height: auto;
+    position: absolute;
   }
 
   #slots-preview {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     height: 100%;
     width: 100%;
+    overflow: hidden;
 
-    .image-slot-container {
-      position: relative;
-        z-index: 1;
+    .image-slot-gem-container {
+      position: absolute;
+      display: inline-block;
+      cursor: grab;
+      width: 100px;
+      height: 100px;
 
-      img.slot-image {
-        transition: width 0.3s ease;
+
+      .image-slot-container {
         position: absolute;
-        cursor: move;
+        z-index: 1;
+        width: inherit;
+        height: auto;
 
-        &.dragging {
-          opacity: 0.2;
+        img.slot-image {
+          transition: width 0.3s ease;
+          width: inherit;
+          height: auto;
+          display: block;
         }
       }
-    }
-    .image-gem-container {
-      position: relative;
-      z-index: 0;
 
-      img.gem-image {
+      .image-gem-container {
+        z-index: 0;
         position: absolute;
-        cursor: move;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        img.gem-image {
+          cursor: move;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .slot-text-container {
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+
+        .slot-text {
+          z-index: 2;
+          font-size: 50px;
+          text-align: center;
+          color: white;
+          font-weight: bold;
+          font-family: 'Arial Bold', serif;
+        }
       }
     }
   }

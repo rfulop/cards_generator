@@ -35,6 +35,7 @@ class CardSlot(models.Model):
     x_position = models.FloatField()
     y_position = models.FloatField()
     gem = models.ForeignKey(GemImage, on_delete=models.CASCADE, null=True, blank=True)
+    text = models.CharField(max_length=80, null=True, blank=True)
 
     def __str__(self):
         return self.title

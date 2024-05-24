@@ -51,12 +51,14 @@ class CardSlotForm(forms.Form):
     y_position = forms.FloatField(widget=forms.HiddenInput(), initial=0)
     gem = forms.ModelChoiceField(queryset=GemImage.objects.all(), empty_label="Sélectionnez une gemme...",
                                  label='Gemme', required=False)
+    text = forms.CharField(max_length=8, label='Texte', required=False)
 
     def __init__(self, *args, **kwargs):
         slot_index = kwargs.pop('slot_index', 0)
         super().__init__(*args, **kwargs)
         slot_preview_url = reverse('slot-preview')
         gem_preview_url = reverse('gem-preview')
+        text_preview_url = reverse('slot-text-preview')
         self.fields['title'].initial = f'Slot {slot_index}'
         self.fields['title'].widget.attrs.update({
             'class': 'slot-title-input',
@@ -70,6 +72,7 @@ class CardSlotForm(forms.Form):
         })
         self.fields['size'].widget.attrs.update({
             'data-slot-id': str(slot_index),
+            'class': 'slot-size-input',
         })
         self.fields['x_position'].name = f'x_position_{slot_index}'
         self.fields['y_position'].name = f'y_position_{slot_index}'
@@ -77,6 +80,13 @@ class CardSlotForm(forms.Form):
             'hx-get': gem_preview_url,
             'hx-target': f'#gem-img-container-{slot_index}',
             'hx-swap': 'innerHTML',
+            'hx-vals': json.dumps({'slot_index': str(slot_index)}),
+            'data-slot-id': str(slot_index),
+        })
+        self.fields['text'].widget.attrs.update({
+            'hx-get': text_preview_url,
+            'hx-target': f'#slot-text-container-{slot_index}',
+            'hx-trigger': 'keyup changed delay:500ms, change',
             'hx-vals': json.dumps({'slot_index': str(slot_index)}),
             'data-slot-id': str(slot_index),
         })

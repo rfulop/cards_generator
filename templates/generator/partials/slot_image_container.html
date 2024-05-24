@@ -1,8 +1,11 @@
 <div hx-swap-oob="beforeend" id="slots-preview">
-    <div id="slot-container-{{ slot_index }}" class="image-slot-gem-container">
+    <div id="slot-container-{{ slot_index }}" class="image-slot-gem-container" data-slot-id="{{ slot_index }}"
+         draggable="true">
         <div id="slot-img-container-{{ slot_index }}" class="image-slot-container">
         </div>
         <div id="gem-img-container-{{ slot_index }}" class="image-gem-container">
+        </div>
+        <div id="slot-text-container-{{ slot_index }}" class="slot-text-container">
         </div>
     </div>
 </div>

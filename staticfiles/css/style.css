@@ -1,3 +1,7 @@
+@font-face {
+  font-family: 'Arial Bold';
+  src: url("/static/fonts/arial-bold.ttf") format("truetype"); }
+
 #card-preview {
   background: repeating-conic-gradient(#808080 0% 25%, #C0C0C0 0% 50%) 50%/2rem 2rem;
   position: relative;
@@ -5,28 +9,58 @@
   height: 581px; }
   #card-preview #outline-preview {
     width: 100%;
-    height: auto; }
+    height: auto;
+    position: absolute; }
   #card-preview #slots-preview {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     height: 100%;
-    width: 100%; }
-    #card-preview #slots-preview .image-slot-container {
-      position: relative;
-      z-index: 1; }
-      #card-preview #slots-preview .image-slot-container img.slot-image {
-        transition: width 0.3s ease;
+    width: 100%;
+    overflow: hidden; }
+    #card-preview #slots-preview .image-slot-gem-container {
+      position: absolute;
+      display: inline-block;
+      cursor: grab;
+      width: 100px;
+      height: 100px; }
+      #card-preview #slots-preview .image-slot-gem-container .image-slot-container {
         position: absolute;
-        cursor: move; }
-        #card-preview #slots-preview .image-slot-container img.slot-image.dragging {
-          opacity: 0.2; }
-    #card-preview #slots-preview .image-gem-container {
-      position: relative;
-      z-index: 0; }
-      #card-preview #slots-preview .image-gem-container img.gem-image {
+        z-index: 1;
+        width: inherit;
+        height: auto; }
+        #card-preview #slots-preview .image-slot-gem-container .image-slot-container img.slot-image {
+          transition: width 0.3s ease;
+          width: inherit;
+          height: auto;
+          display: block; }
+      #card-preview #slots-preview .image-slot-gem-container .image-gem-container {
+        z-index: 0;
         position: absolute;
-        cursor: move; }
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%; }
+        #card-preview #slots-preview .image-slot-gem-container .image-gem-container img.gem-image {
+          cursor: move;
+          width: 100%;
+          height: 100%; }
+      #card-preview #slots-preview .image-slot-gem-container .slot-text-container {
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none; }
+        #card-preview #slots-preview .image-slot-gem-container .slot-text-container .slot-text {
+          z-index: 2;
+          font-size: 50px;
+          text-align: center;
+          color: white;
+          font-weight: bold;
+          font-family: 'Arial Bold', serif; }
 
 .deleted {
   display: none; }
