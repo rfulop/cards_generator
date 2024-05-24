@@ -14,7 +14,11 @@ function init() {
         });
     }
 
-    document.querySelector(PRESET_SELECTORS.preset).addEventListener('change', handlePresetChange);
+    document.querySelector(PRESET_SELECTORS.preset).addEventListener('change', (event) => {
+        handlePresetChange(event).catch(error => {
+            console.error('Error handling preset change:', error);
+        });
+    });
 }
 
 function dispatchChangeEvent(element) {
