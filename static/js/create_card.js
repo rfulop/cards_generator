@@ -66,7 +66,7 @@ function handleSliderInput(event) {
     }
 }
 
-function updateSlotFont(slotContainer) {
+function updateSlotText(slotContainer) {
     const slotId = slotContainer.getAttribute(SELECTORS.dataSlotUuid);
     const fontSelect = document.getElementById(`id_slots-${slotId}-font`);
     if (fontSelect) {
@@ -76,7 +76,18 @@ function updateSlotFont(slotContainer) {
                 slotTextContainer.style.fontFamily = fontSelect.value;
             }
         });
+    }
+    const textColorInput = document.getElementById(`id_slots-${slotId}-text_color`);
 
+    if (textColorInput) {
+        const updateSlotColorText = function (event) {
+            const slotTextContainer = slotContainer.querySelector(`.${SELECTORS.slotTextContainerClass}`);
+            if (slotTextContainer) {
+                slotTextContainer.style.color = textColorInput.value;
+            }
+        };
+        textColorInput.addEventListener('change', updateSlotColorText);
+        textColorInput.addEventListener('input', updateSlotColorText);
     }
 }
 
@@ -86,7 +97,7 @@ function handleMutations(mutations) {
             mutation.addedNodes.forEach(node => {
                 if (node.nodeType === 1 && node.classList.contains(SELECTORS.slotContainerClass)) {
                     makeContainerDraggable(node);
-                    updateSlotFont(node);
+                    updateSlotText(node);
                 }
             });
         }

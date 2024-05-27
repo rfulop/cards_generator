@@ -2,6 +2,10 @@
   font-family: 'Arial Bold';
   src: url("/static/fonts/arial-bold.ttf") format("truetype"); }
 
+@font-face {
+  font-family: 'Arial';
+  src: url("/static/fonts/arial.ttf") format("truetype"); }
+
 #card-preview {
   background: repeating-conic-gradient(#808080 0% 25%, #C0C0C0 0% 50%) 50%/2rem 2rem;
   position: relative;

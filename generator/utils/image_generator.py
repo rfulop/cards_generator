@@ -27,7 +27,7 @@ def save_image(image, image_path):
     image.save(image_path, format='PNG')
 
 
-def draw_text_on_slot(slot_image, text, font, slot_width):
+def draw_text_on_slot(slot_image, text, font, color, slot_width):
     draw = ImageDraw.Draw(slot_image)
     font_file = settings.AVAILABLE_FONTS.get(font, settings.AVAILABLE_FONTS.get(settings.DEFAULT_SLOT_FONT))
     font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', font_file)
@@ -37,7 +37,7 @@ def draw_text_on_slot(slot_image, text, font, slot_width):
     # Custom padding for arial-bold font to center the text
     vertical_padding = 0.10
     text_y_position += text_y_position * vertical_padding
-    draw.text((text_x_position, text_y_position), text, fill='white', font=font, anchor='mm', align='center')
+    draw.text((text_x_position, text_y_position), text, fill=color, font=font, anchor='mm', align='center')
     return slot_image
 
 
@@ -54,7 +54,8 @@ def generate_card_image(outline, slots, displayed_width):
         text = slot.get('text', '')
         if text:
             font = slot.get('font', settings.DEFAULT_SLOT_FONT)
-            slot_image = draw_text_on_slot(slot_image, text, font, size * scale_factor)
+            color = slot.get('text_color', settings.DEFAULT_SLOT_TEXT_COLOR)
+            slot_image = draw_text_on_slot(slot_image, text, font, color, size * scale_factor)
 
         x_position = slot['x_position']
         y_position = slot['y_position']

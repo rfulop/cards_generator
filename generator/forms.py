@@ -54,7 +54,9 @@ class CardSlotForm(forms.Form):
                                  label='Gemme', required=False)
     text = forms.CharField(max_length=8, label='Texte', required=False)
     font = forms.ChoiceField(choices=[(k, k) for k in settings.AVAILABLE_FONTS.keys()], label='Police', required=False,
-                             initial='Arial Bold')
+                             initial=settings.DEFAULT_SLOT_FONT)
+    text_color = forms.CharField(widget=forms.TextInput(attrs={'type': 'color'}), label='Couleur du texte',
+                                 required=False, initial=settings.DEFAULT_SLOT_TEXT_COLOR)
 
     def __init__(self, *args, **kwargs):
         slot_index = kwargs.pop('slot_index', 0)

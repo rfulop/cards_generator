@@ -152,6 +152,7 @@ CARD_IMAGE_UPLOAD_PATH = 'generated_cards/'
 
 
 DEFAULT_SLOT_FONT = 'Arial Bold'
+DEFAULT_SLOT_TEXT_COLOR = '#ffffff'
 
 AVAILABLE_FONTS = {
     'Arial': 'arial.ttf',

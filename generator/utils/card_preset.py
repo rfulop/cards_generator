@@ -20,6 +20,7 @@ def create_card_preset_from_json(preset_json_str):
             gem=GemImage.objects.get(id=slot_json['gem']) if 'gem' in slot_json else None,
             text=slot_json['text'] if 'text' in slot_json else None,
             font=slot_json['font'] if 'font' in slot_json else None,
+            text_color=slot_json['text_color'] if 'text_color' in slot_json else None,
         )
         card_preset.slots.add(slot)
 

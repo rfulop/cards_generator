@@ -161,6 +161,8 @@ class CardCreateView(View):
                 'gem': slot_form.cleaned_data.get('gem').id if slot_form.cleaned_data.get('gem') else None,
                 'text': slot_form.cleaned_data.get('text') if slot_form.cleaned_data.get('text') else None,
                 'font': slot_form.cleaned_data.get('font') if slot_form.cleaned_data.get('font') else None,
+                'text_color:': slot_form.cleaned_data.get('text_color') if slot_form.cleaned_data.get('text_color')
+                else None,
             }
             for slot_form in slot_formset if slot_form.cleaned_data.get('DELETE') is False
         ]
@@ -227,6 +229,7 @@ class CardUpdateView(UpdateView):
                 'gem_id': slot['gem'] if 'gem' in slot else None,
                 'text': slot['text'] if 'text' in slot else None,
                 'font': slot['font'] if 'font' in slot else None,
+                'text_color': slot['text_color'] if 'text_color' in slot else None,
             }
             for slot in slots
         ]
@@ -264,6 +267,8 @@ class CardUpdateView(UpdateView):
                         'gem': slot_form.cleaned_data['gem'].id if slot_form.cleaned_data['gem'] else None,
                         'text': slot_form.cleaned_data['text'] if slot_form.cleaned_data['text'] else None,
                         'font': slot_form.cleaned_data['font'] if slot_form.cleaned_data['font'] else None,
+                        'text_color': slot_form.cleaned_data['text_color'] if slot_form.cleaned_data['text_color']
+                        else None,
                     }
                     slots_data.append(slot_data)
 
@@ -310,7 +315,7 @@ class GetPresetDetailsView(View):
     def get(self, request, *args, **kwargs):
         preset = get_object_or_404(CardPreset, pk=self.kwargs['preset_id'])
         slots = list(preset.slots.values('id', 'title', 'image_id', 'size', 'x_position', 'y_position', 'gem_id',
-                                         'text', 'font'))
+                                         'text', 'font', 'text_color'))
         data = {
             'name': preset.name,
             'outline_id': preset.outline.id,

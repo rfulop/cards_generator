@@ -20,7 +20,7 @@ class GemImageAdmin(admin.ModelAdmin):
 
 @admin.register(CardSlot)
 class CardSlotAdmin(admin.ModelAdmin):
-    list_display = ('title', 'image', 'size', 'x_position', 'y_position', 'gem', 'text', 'font')
+    list_display = ('title', 'image', 'size', 'x_position', 'y_position', 'gem', 'text', 'font', 'text_color')
 
 
 @admin.register(CardPreset)

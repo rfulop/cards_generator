@@ -44,6 +44,7 @@ function updateSlotFields(index, slot) {
     const yPosInput = document.getElementById(`id_slots-${index}-y_position`);
     const textInput = document.getElementById(`id_slots-${index}-text`);
     const fontInput = document.getElementById(`id_slots-${index}-font`);
+    const textColorInput = document.getElementById(`id_slots-${index}-text_color`);
 
     if (imageSelect) {
         imageSelect.value = slot.image_id;
@@ -66,6 +67,11 @@ function updateSlotFields(index, slot) {
     if (fontInput) {
         fontInput.value = slot.font;
         dispatchChangeEvent(fontInput);
+    }
+
+    if (textColorInput) {
+        textColorInput.value = slot.text_color;
+        dispatchChangeEvent(textColorInput);
     }
 
     sizeInput.value = slot.size;
