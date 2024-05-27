@@ -2,7 +2,8 @@ const SELECTORS = {
     dataSlotUuid: 'data-slot-id',
     slotsPreview: '#slots-preview',
     slotContainerPrefix: 'slot-container-',
-    slotImageClass: 'image-slot-gem-container',
+    slotContainerClass: 'image-slot-gem-container',
+    slotTextContainerClass: 'slot-text-container',
     slotTextClass: 'slot-text',
     inputTypeRange: 'range',
 };
@@ -65,12 +66,27 @@ function handleSliderInput(event) {
     }
 }
 
+function updateSlotFont(slotContainer) {
+    const slotId = slotContainer.getAttribute(SELECTORS.dataSlotUuid);
+    const fontSelect = document.getElementById(`id_slots-${slotId}-font`);
+    if (fontSelect) {
+        fontSelect.addEventListener('change', () => {
+            const slotTextContainer = slotContainer.querySelector(`.${SELECTORS.slotTextContainerClass}`);
+            if (slotTextContainer) {
+                slotTextContainer.style.fontFamily = fontSelect.value;
+            }
+        });
+
+    }
+}
+
 function handleMutations(mutations) {
     mutations.forEach(mutation => {
         if (mutation.addedNodes.length) {
             mutation.addedNodes.forEach(node => {
-                if (node.nodeType === 1 && node.classList.contains(SELECTORS.slotImageClass)) {
+                if (node.nodeType === 1 && node.classList.contains(SELECTORS.slotContainerClass)) {
                     makeContainerDraggable(node);
+                    updateSlotFont(node);
                 }
             });
         }

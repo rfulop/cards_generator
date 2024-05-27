@@ -149,3 +149,11 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Custom settings
 CARD_IMAGE_UPLOAD_PATH = 'generated_cards/'
+
+
+DEFAULT_SLOT_FONT = 'Arial Bold'
+
+AVAILABLE_FONTS = {
+    'Arial': 'arial.ttf',
+    'Arial Bold': 'arial-bold.ttf',
+}

@@ -1,6 +1,7 @@
 import json
 
 from django import forms
+from django.conf import settings
 from django.forms import formset_factory, BaseFormSet
 from django.urls import reverse
 
@@ -52,6 +53,8 @@ class CardSlotForm(forms.Form):
     gem = forms.ModelChoiceField(queryset=GemImage.objects.all(), empty_label="Sélectionnez une gemme...",
                                  label='Gemme', required=False)
     text = forms.CharField(max_length=8, label='Texte', required=False)
+    font = forms.ChoiceField(choices=[(k, k) for k in settings.AVAILABLE_FONTS.keys()], label='Police', required=False,
+                             initial='Arial Bold')
 
     def __init__(self, *args, **kwargs):
         slot_index = kwargs.pop('slot_index', 0)

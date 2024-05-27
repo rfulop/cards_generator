@@ -43,6 +43,7 @@ function updateSlotFields(index, slot) {
     const xPosInput = document.getElementById(`id_slots-${index}-x_position`);
     const yPosInput = document.getElementById(`id_slots-${index}-y_position`);
     const textInput = document.getElementById(`id_slots-${index}-text`);
+    const fontInput = document.getElementById(`id_slots-${index}-font`);
 
     if (imageSelect) {
         imageSelect.value = slot.image_id;
@@ -60,6 +61,11 @@ function updateSlotFields(index, slot) {
         htmx.process(textInput);
         textInput.value = slot.text;
         dispatchChangeEvent(textInput);
+    }
+
+    if (fontInput) {
+        fontInput.value = slot.font;
+        dispatchChangeEvent(fontInput);
     }
 
     sizeInput.value = slot.size;

@@ -64,14 +64,13 @@
         justify-content: center;
         align-items: center;
         pointer-events: none;
+        font-family: 'Arial Bold', serif;
+        color: white;
 
         .slot-text {
           z-index: 2;
           font-size: 50px;
           text-align: center;
-          color: white;
-          font-weight: bold;
-          font-family: 'Arial Bold', serif;
         }
       }
     }

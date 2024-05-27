@@ -104,7 +104,7 @@ class DeleteSlotFormView(View):
 class CreateSlotFormView(View):
     template_name_slot_form = 'generator/partials/slot_form.html'
     template_name_management_fields = 'generator/partials/formset_management_fields.html'
-    template_name_image_container = 'generator/partials/slot_image_container.html'
+    template_name_image_container = 'generator/partials/slot_container.html'
 
     def get(self, request, *args, **kwargs):
         total_forms = int(request.GET.get('total_forms', 0)) + 1
@@ -159,12 +159,12 @@ class CardCreateView(View):
                 'x_position': slot_form.cleaned_data.get('x_position'),
                 'y_position': slot_form.cleaned_data.get('y_position'),
                 'gem': slot_form.cleaned_data.get('gem').id if slot_form.cleaned_data.get('gem') else None,
-                'text': slot_form.cleaned_data.get('text') if slot_form.cleaned_data.get('text') else None
+                'text': slot_form.cleaned_data.get('text') if slot_form.cleaned_data.get('text') else None,
+                'font': slot_form.cleaned_data.get('font') if slot_form.cleaned_data.get('font') else None,
             }
             for slot_form in slot_formset if slot_form.cleaned_data.get('DELETE') is False
         ]
 
-        print('slots ->', slots)
         card = create_card(card_name, preset, outline, slots, DISPLAYED_WIDTH)
         messages.success(request, self.success_message)
         return redirect('card-detail', card_id=card.id)
@@ -225,7 +225,8 @@ class CardUpdateView(UpdateView):
                 'x_position': slot['x_position'],
                 'y_position': slot['y_position'],
                 'gem_id': slot['gem'] if 'gem' in slot else None,
-                'text': slot['text'] if 'text' in slot else None
+                'text': slot['text'] if 'text' in slot else None,
+                'font': slot['font'] if 'font' in slot else None,
             }
             for slot in slots
         ]
@@ -261,7 +262,8 @@ class CardUpdateView(UpdateView):
                         'x_position': slot_form.cleaned_data['x_position'],
                         'y_position': slot_form.cleaned_data['y_position'],
                         'gem': slot_form.cleaned_data['gem'].id if slot_form.cleaned_data['gem'] else None,
-                        'text': slot_form.cleaned_data['text'] if slot_form.cleaned_data['text'] else None
+                        'text': slot_form.cleaned_data['text'] if slot_form.cleaned_data['text'] else None,
+                        'font': slot_form.cleaned_data['font'] if slot_form.cleaned_data['font'] else None,
                     }
                     slots_data.append(slot_data)
 
@@ -308,7 +310,7 @@ class GetPresetDetailsView(View):
     def get(self, request, *args, **kwargs):
         preset = get_object_or_404(CardPreset, pk=self.kwargs['preset_id'])
         slots = list(preset.slots.values('id', 'title', 'image_id', 'size', 'x_position', 'y_position', 'gem_id',
-                                         'text'))
+                                         'text', 'font'))
         data = {
             'name': preset.name,
             'outline_id': preset.outline.id,

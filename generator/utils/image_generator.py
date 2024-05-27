@@ -27,9 +27,10 @@ def save_image(image, image_path):
     image.save(image_path, format='PNG')
 
 
-def draw_text_on_slot(slot_image, text, slot_width):
+def draw_text_on_slot(slot_image, text, font, slot_width):
     draw = ImageDraw.Draw(slot_image)
-    font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', 'arial-bold.ttf')
+    font_file = settings.AVAILABLE_FONTS.get(font, settings.AVAILABLE_FONTS.get(settings.DEFAULT_SLOT_FONT))
+    font_path = os.path.join(settings.BASE_DIR, 'static', 'fonts', font_file)
     font = ImageFont.truetype(font_path, int(slot_width / 2))
     text_x_position = slot_image.width / 2
     text_y_position = slot_image.height / 2
@@ -51,8 +52,9 @@ def generate_card_image(outline, slots, displayed_width):
         slot_image = resize_image(slot_image, size * scale_factor)
 
         text = slot.get('text', '')
-        if text:  # Check if there is text
-            slot_image = draw_text_on_slot(slot_image, text, size * scale_factor)
+        if text:
+            font = slot.get('font', settings.DEFAULT_SLOT_FONT)
+            slot_image = draw_text_on_slot(slot_image, text, font, size * scale_factor)
 
         x_position = slot['x_position']
         y_position = slot['y_position']
